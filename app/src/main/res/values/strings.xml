@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Task</string>
+    <string name="err_network_not_available">Không có kết nối mạng</string>
+    <string name="err_common">Gửi dữ liệu thất bại, Có lỗi xảy ra, vui lòng thử lại sau. Code: %1$d</string>
+    <string name="send_success">Gửi dữ liệu thành công</string>
+    <string name="battery_percentage">Phần trăm pin:</string>
+    <string name="location">Tọa độ: </string>
+    <string name="stopping_thread">Đang dừng luồng</string>
+    <string name="keep_running">Tiếp tục chạy</string>
+    <string name="start">Bắt đầu</string>
+    <string name="stop">Dừng lại</string>
+    <string name="start_to_run">Bắt đầu chạy</string>
+    <string name="prepare_to_send_data">Chuẩn bị gửi dữ liệu</string>
+    <string name="running">Đang chạy</string>
+    <string name="time_to_get_gps">Thời gian lấy GPS(s)</string>
+    <string name="time_to_get_pin">Thời gian lấy PIN(s)</string>
+    <string name="notify_input_time">Bạn phải nhập đủ thông tin thời gian</string>
+    <string name="home_page">Trang chủ</string>
+</resources>

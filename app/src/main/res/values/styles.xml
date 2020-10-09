@@ -1,0 +1,53 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <!-- Toolbar -->
+    <style name="PopUpTheme" parent="@style/ThemeOverlay.MaterialComponents.Light">
+        <item name="overlapAnchor">false</item>
+    </style>
+    <style name="ToolBarStyle">
+        <item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="android:popupTheme">@style/PopUpTheme</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:elevation">@dimen/dimen_05x</item>
+        <item name="android:contentInsetEnd">@dimen/zero</item>
+        <item name="contentInsetEndWithActions">@dimen/zero</item>
+        <item name="android:contentInsetStart">@dimen/zero</item>
+        <item name="contentInsetStartWithNavigation">@dimen/zero</item>
+    </style>
+    <!-- End of Toolbar -->
+
+    <!-- EditText -->
+    <style name="EditText" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:selectAllOnFocus">true</item>
+        <item name="android:autofillHints" >@string/app_name</item>
+        <item name="android:paddingStart">@dimen/dimen_2x</item>
+        <item name="android:paddingEnd">@dimen/dimen_2x</item>
+        <item name="android:paddingTop">@dimen/dimen_x1x</item>
+        <item name="android:paddingBottom">@dimen/dimen_x1x</item>
+    </style>
+
+    <style name="EditText.Regular">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="background">@color/white</item>
+    </style>
+
+    <style name="EditText.Medium">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="EditText.Bold">
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+    <!-- End of EditText -->
+</resources>
