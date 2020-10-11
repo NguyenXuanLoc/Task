@@ -11,6 +11,7 @@ import com.example.task.R
 import com.example.task.common.Constant
 import com.example.task.common.ext.gone
 import com.example.task.common.ext.visible
+import com.example.task.common.util.PermissionUtil
 import com.example.task.ui.base.BaseActivity
 import com.example.task.ui.main.thread.ShareData
 import com.example.task.ui.main.thread.ThreadGps
@@ -30,6 +31,8 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     private lateinit var threadGps: Thread
     private lateinit var bm: BatteryManager
     private lateinit var shareData: ShareData
+    private var RC_ACCESS_FINE_LOCATION = 1
+    private val RC_ACCESS_COARSE_LOCATION = 2
     private val mHandler: Handler by lazy {
         @SuppressLint("HandlerLeak")
         object : Handler() {
@@ -80,7 +83,19 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_start -> {
-                if (edtTimeGps.text.isNotEmpty() && edtTimePin.text.isNotEmpty()) {
+                if (edtTimeGps.text.isNotEmpty() && edtTimePin.text.isNotEmpty() &&
+                    PermissionUtil.isGranted(
+                        self,
+                        arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                        RC_ACCESS_FINE_LOCATION,
+                        true
+                    ) && PermissionUtil.isGranted(
+                        self,
+                        arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                        RC_ACCESS_COARSE_LOCATION,
+                        true
+                    )
+                ) {
                     threadGps =
                         ThreadGps(shareData, mHandler, edtTimeGps.text.toString().toInt(), self)
                     threadPin = ThreadPin(shareData, edtTimePin.text.toString().toInt(), mHandler)
@@ -99,7 +114,7 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
                     threadGps.start()
                     threadPin.start()
                 } else {
-                    toast(R.string.notify_input_time)
+                    toast(R.string.notify_input_time_or_permission)
                 }
             }
             R.id.menu_stop -> {

@@ -14,6 +14,6 @@
     <string name="running">Đang chạy</string>
     <string name="time_to_get_gps">Thời gian lấy GPS(s)</string>
     <string name="time_to_get_pin">Thời gian lấy PIN(s)</string>
-    <string name="notify_input_time">Bạn phải nhập đủ thông tin thời gian</string>
+    <string name="notify_input_time_or_permission">Bạn phải nhập đủ thông tin thời gian hoặc cấp đủ quyền</string>
     <string name="home_page">Trang chủ</string>
 </resources>

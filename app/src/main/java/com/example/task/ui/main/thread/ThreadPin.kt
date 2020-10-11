@@ -1,6 +1,7 @@
 package com.example.task.ui.main.thread
 
 import android.os.Handler
+import android.util.Log
 import com.example.task.common.Constant
 import com.example.task.common.util.TimeUtil
 
@@ -13,6 +14,7 @@ class ThreadPin(var shareData: ShareData, var time: Int, var handler: Handler) :
                 while (shareData.flat != 2 && !shareData.isStop!!) {
                     shareData.wait()
                 }
+                Log.e("TAG", "PIN")
                 shareData.addData(shareData.getBattery())
                 shareData.flat = 1
                 sleep(TimeUtil.getSecond(time))

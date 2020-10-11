@@ -5,6 +5,7 @@ import android.location.Location
 import android.location.LocationListener
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import com.example.task.R
 import com.example.task.common.Constant
 import com.example.task.common.util.TimeUtil
@@ -20,6 +21,7 @@ class ThreadGps(var shareData: ShareData, var handler: Handler, var time: Int, v
                 while (!shareData.isStop!! && shareData.flat != 2) {
                     shareData.wait()
                 }
+                Log.e("TAG", "GPS")
                 shareData.addData(Constant.GPS)
                 shareData.getLocation(this)
                 shareData.flat = 1

@@ -2,6 +2,7 @@ package com.example.task.ui.main.thread
 
 import android.content.Context
 import android.os.Handler
+import android.util.Log
 import com.example.task.common.Constant
 import com.example.task.common.util.TimeUtil
 
@@ -10,6 +11,7 @@ class ThreadMain(var shareData: ShareData, var handler: Handler, var ctx: Contex
         sleep(TimeUtil.getSecond(1))
         while (!shareData.isStop!!) {
             synchronized(shareData) {
+                Log.e("TAG", "\t\tMAIN")
                 if (shareData.getListSize() <= 5) {
                     if (shareData.list.size > 0) {
                         shareData.sendList(handler, Constant.WHAT_NOTIFY)
