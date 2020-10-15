@@ -16,12 +16,12 @@ class ThreadGps(var shareData: ShareData, var handler: Handler, var time: Int, v
 
     override fun run() {
         while (!shareData.isStop!!) {
+            Log.e("TAG", "GPS")
             synchronized(shareData) {
                 shareData.notifyAll()
                 while (!shareData.isStop!! && shareData.flat != 2) {
                     shareData.wait()
                 }
-                Log.e("TAG", "GPS")
                 shareData.addData(Constant.GPS)
                 shareData.getLocation(this)
                 shareData.flat = 1

@@ -9,12 +9,12 @@ class ThreadPin(var shareData: ShareData, var time: Int, var handler: Handler) :
 
     override fun run() {
         while (!shareData.isStop!!) {
+            Log.e("TAG", "PIN")
             synchronized(shareData) {
                 shareData.notifyAll()
                 while (shareData.flat != 2 && !shareData.isStop!!) {
                     shareData.wait()
                 }
-                Log.e("TAG", "PIN")
                 shareData.addData(shareData.getBattery())
                 shareData.flat = 1
                 sleep(TimeUtil.getSecond(time))

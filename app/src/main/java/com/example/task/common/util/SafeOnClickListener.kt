@@ -23,4 +23,5 @@ class SafeOnClickListener(
 
         onSafeClickListener(v)
     }
+
 }
