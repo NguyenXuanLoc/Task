@@ -7,7 +7,6 @@ import android.location.LocationManager
 import android.os.BatteryManager
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.MenuItem
 import com.example.task.R
 import com.example.task.common.Constant
@@ -20,8 +19,6 @@ import com.example.task.ui.main.thread.ThreadGps
 import com.example.task.ui.main.thread.ThreadMain
 import com.example.task.ui.main.thread.ThreadPin
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.toast
@@ -138,20 +135,5 @@ class HomeActivity : BaseActivity<HomeView, HomePresenter>(), HomeView,
             }
         }
         return false
-    }
-
-    fun test() {
-        list.add("A")
-        list.add("B")
-        list.add("C")
-        list.add("D")
-        list.add("E")
-
-        val gson = Gson()
-        val json = gson.toJson(list)
-        val editor: SharedPreferences.Editor = shref.edit()
-        editor.remove(key).commit()
-        editor.putString(key, json)
-        editor.commit()
     }
 }
