@@ -9,6 +9,7 @@ object Constant {
     const val WHAT_PUSH_TO_SERVER = 1
     const val WHAT_RESULT = 2
     const val WHAT_NOTIFY = 3
+
 }
 
 object ErrorCode {
@@ -23,4 +24,26 @@ object ResponseCode {
 
 object Api {
     const val DATA = "data"
+    const val GET_PARTNER_CODE = "get_partner_code"
+    const val GET_DATA = "get_data"
+    const val LOG_ACCOUNT = "log_account"
+    const val ID = "id"
+    const val MSISDN = "msisdn"
+
+    const val PARTNER_CODE = "partner_code"
+    const val APP_CODE = "app_code"
+    const val LOG_ACTION = "log_action"
+    const val LOGIN_STATUS = "login_status"
+    const val ACT_START_TIME = "act_start_time"
+    const val ACT_END_TIME = "act_end_time"
+    const val VIEW_TIME = "view_time"
+    const val VIEW_LINK = "view_link"
+    const val CHANNEL = "channel"
+    const val ON_MOBI = "OnMobi"
+
+    const val LOGIN_ONMOBI = "auth/authorize"
+}
+
+object Key {
+    const val PARTNER_CODE = "partner_code"
 }

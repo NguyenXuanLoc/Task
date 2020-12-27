@@ -1,4 +1,4 @@
-package com.example.task.ui.main.thread
+package com.example.task.ui.partner.thread
 
 import android.Manifest
 import android.content.Context

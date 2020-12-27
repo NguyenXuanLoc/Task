@@ -1,4 +1,4 @@
-package com.example.task.ui.main.thread
+package com.example.task.ui.partner.thread
 
 import android.os.Handler
 import android.util.Log

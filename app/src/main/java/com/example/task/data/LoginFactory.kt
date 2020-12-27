@@ -2,7 +2,7 @@ package com.example.task.data
 
 import com.example.task.BuildConfig
 import com.example.task.common.Api
-import com.example.task.data.response.DataResponse
+import com.example.task.data.response.InfoResponse
 import com.google.gson.GsonBuilder
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -10,21 +10,32 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.POST
 import vn.vano.vicall.data.response.BaseListResponse
 import vn.vano.vicall.data.response.BaseResponse
+import vn.vano.vicall.data.response.BaseResponseLogin
 import java.util.concurrent.TimeUnit
 
-interface ServiceFactory {
+interface LoginFactory {
 
     companion object {
         private const val REQUEST_TIMEOUT = 15L
-
-        fun create(BASE_URL: String = "http://onmb.vano.vn/v1/onmb/"): ServiceFactory {
+        fun create(BASE_URL: String = "http://api.onmobi.vn/v1/"): LoginFactory? {
             val okHttpClientBuilder = OkHttpClient.Builder()
                 .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
+                .addInterceptor { chain ->
+                    val newRequest = chain.request().newBuilder()
+                        .addHeader("authorization", "Bearer xyz")
+                        .addHeader("Origin", "http://onmobi.vn")
+                        .addHeader("Referer", "http://onmobi.vn/")
+                        .addHeader("Accept", "*/*")
+                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                        .build()
+                    chain.proceed(newRequest)
+                }
 
             if (BuildConfig.DEBUG) {
                 val httpLoggingInterceptor = HttpLoggingInterceptor()
@@ -43,31 +54,12 @@ interface ServiceFactory {
                 .client(okHttpClientBuilder.build())
                 .build()
 
-            return retrofit.create(ServiceFactory::class.java)
+            return retrofit.create(LoginFactory::class.java)
         }
     }
 
-    @FormUrlEncoded
-    @POST(Api.DATA)
-    fun sendData(@FieldMap params: HashMap<String, String>): Single<BaseResponse<String?>>
-
-
-    @GET(Api.GET_PARTNER_CODE)
-    fun getPartnerCode(): Single<BaseListResponse<String>>
-
-    @GET(Api.GET_DATA)
-    fun getData(@QueryMap params: HashMap<String, String>): Single<DataResponse>
-
-    @FormUrlEncoded
-    @POST(Api.LOG_ACCOUNT)
-    fun logAccount(@FieldMap params: HashMap<String, String>): Single<BaseResponse<String>>
-
-    @FormUrlEncoded
-    @POST(Api.LOG_ACTION)
-    fun logAction(@FieldMap params: HashMap<String, String>): Single<BaseResponse<String>>
-
     @POST(Api.LOGIN_ONMOBI)
-    fun login(@Body params: HashMap<String, String>): Single<BaseResponse<String>>
+    fun login(@Body params: HashMap<String, String>): Single<InfoResponse>
 
 
 }

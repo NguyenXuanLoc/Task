@@ -6,7 +6,7 @@ import java.io.Serializable
 
 open class BaseModel : Serializable {
     var code: String? = null
-    var message: String = ""
+//    var message: String = ""
 
     fun responseIsSuccess(): Boolean {
         return code == ResponseCode.SUCCESS

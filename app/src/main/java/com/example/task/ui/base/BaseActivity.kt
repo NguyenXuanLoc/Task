@@ -6,17 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import com.example.task.common.ext.gone
-import com.example.task.common.ext.visible
-import com.example.task.common.util.CommonUtil
 import com.example.pview.ui.base.BasePresenterImp
 import com.example.task.R
+import com.example.task.common.ext.gone
 import com.example.task.common.ext.showApiCallError
 import com.example.task.common.ext.showNetworkError
+import com.example.task.common.ext.visible
+import com.example.task.common.util.CommonUtil
 import kotlinx.android.synthetic.main.activity_base.*
 import org.jetbrains.anko.contentView
 import org.jetbrains.anko.ctx
-import org.jetbrains.anko.toast
 
 
 abstract class BaseActivity<V : BaseView, P : BasePresenterImp<V>> : AppCompatActivity(), BaseView {
