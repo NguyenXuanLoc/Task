@@ -2,6 +2,8 @@ package com.example.task.data
 
 import com.example.task.BuildConfig
 import com.example.task.common.Api
+import com.example.task.common.Constant
+import com.example.task.common.util.PefUtil
 import com.example.task.data.response.InfoResponse
 import com.google.gson.GsonBuilder
 import io.reactivex.Single
@@ -12,9 +14,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
-import vn.vano.vicall.data.response.BaseListResponse
-import vn.vano.vicall.data.response.BaseResponse
-import vn.vano.vicall.data.response.BaseResponseLogin
 import java.util.concurrent.TimeUnit
 
 interface LoginFactory {
@@ -29,6 +28,7 @@ interface LoginFactory {
                 .addInterceptor { chain ->
                     val newRequest = chain.request().newBuilder()
                         .addHeader("authorization", "Bearer xyz")
+                        .addHeader("User-Agent", PefUtil.getString(Constant.SETTING_AGENT))
                         .addHeader("Origin", "http://onmobi.vn")
                         .addHeader("Referer", "http://onmobi.vn/")
                         .addHeader("Accept", "*/*")

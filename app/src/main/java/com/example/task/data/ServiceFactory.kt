@@ -3,6 +3,7 @@ package com.example.task.data
 import com.example.task.BuildConfig
 import com.example.task.common.Api
 import com.example.task.data.response.DataResponse
+import com.example.task.data.response.SettingResponse
 import com.google.gson.GsonBuilder
 import io.reactivex.Single
 import okhttp3.OkHttpClient
@@ -11,7 +12,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
-import vn.vano.vicall.data.response.BaseListResponse
+import com.example.task.data.response.BaseListResponse
 import vn.vano.vicall.data.response.BaseResponse
 import java.util.concurrent.TimeUnit
 
@@ -57,6 +58,9 @@ interface ServiceFactory {
 
     @GET(Api.GET_DATA)
     fun getData(@QueryMap params: HashMap<String, String>): Single<DataResponse>
+
+    @GET(Api.GET_SETTING)
+    fun getSetting(): Single<BaseListResponse<SettingResponse>>
 
     @FormUrlEncoded
     @POST(Api.LOG_ACCOUNT)

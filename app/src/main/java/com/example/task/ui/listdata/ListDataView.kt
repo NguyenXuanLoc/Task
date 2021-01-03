@@ -6,6 +6,7 @@ import com.example.task.data.model.VideoModel
 import com.example.task.ui.base.BaseView
 
 interface ListDataView : BaseView {
+    fun dataNull()
     fun loginSuccess(user: InfoModel)
     fun loadDataSuccess(accounts: ArrayList<AccountModel>, videos: ArrayList<VideoModel>)
 }

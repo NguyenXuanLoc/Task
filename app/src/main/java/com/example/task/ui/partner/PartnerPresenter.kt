@@ -10,7 +10,30 @@ import com.example.task.data.interactor.TaskInteractor
 import com.example.task.data.model.AccountModel
 
 class PartnerPresenter(var ctx: Context) : BasePresenterImp<PartnerView>(ctx) {
+    fun showLoading() {
+        view.also { showProgressDialog() }
+    }
+
+    fun hideLoading() {
+        view.also { dismissProgressDialog() }
+    }
+
     private val interactor by lazy { TaskInteractor() }
+    fun getSetting() {
+        view?.also { v ->
+            if (ctx.networkIsConnected()) {
+                interactor.getSettings().applyIOWithAndroidMainThread()
+                    .subscribe({
+                        v.loadSettingSuccess(it)
+                    }, {
+                        v.onApiCallError()
+                    }).addToCompositeDisposable(compositeDisposable)
+            } else {
+                v.onNetworkError()
+
+            }
+        }
+    }
 
     fun sendData(partnerCode: String) {
         view?.also { v ->

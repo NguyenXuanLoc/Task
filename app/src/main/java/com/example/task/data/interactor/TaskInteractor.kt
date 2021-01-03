@@ -2,10 +2,9 @@ package com.example.task.data.interactor
 
 import com.example.task.common.Api
 import com.example.task.data.mapper.convertToModel
-import com.example.task.data.model.AccountModel
-import com.example.task.data.model.BaseModel
-import com.example.task.data.model.DataModel
-import com.example.task.data.model.InfoModel
+import com.example.task.data.mapper.convertToModels
+import com.example.task.data.model.*
+import com.example.task.data.response.SettingResponse
 import io.reactivex.Single
 
 class TaskInteractor : BaseInteractor() {
@@ -13,7 +12,7 @@ class TaskInteractor : BaseInteractor() {
     fun login(ob: AccountModel): Single<InfoModel>? {
         var param = HashMap<String, String>()
         param["grant_type"] = "login"
-        param["username"] = ob.phone.toString()
+        param["username"] = "0${ob.phone.toString()}"
         param["password"] = ob.password.toString()
         param["captcha"] = "1234"
         return loginService?.login(param)?.map { it.convertToModel() }
@@ -50,6 +49,12 @@ class TaskInteractor : BaseInteractor() {
         param[Api.PARTNER_CODE] = partnerCode
         param[Api.APP_CODE] = appCode
         return service.logAccount(param).map { it.convertToModel() }
+    }
+
+    fun getSettings(): Single<List<SettingModel>> {
+        return service.getSetting().map { it ->
+            it.data?.convertToModels()
+        }
     }
 
     fun logAction(

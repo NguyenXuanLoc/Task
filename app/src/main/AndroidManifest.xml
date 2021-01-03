@@ -25,7 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.test.TestActivity" />
+        <activity android:name="vn.meocon.increaseviews.screen.test.TestActivity">
+
+        </activity>
         <activity
             android:name=".ui.listdata.ListDataActivity"
             android:launchMode="singleTop"

@@ -1,4 +1,4 @@
-package com.example.task.ui.test
+package vn.meocon.increaseviews.screen.test
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -7,21 +7,39 @@ import android.util.Log
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.task.R
-import kotlinx.android.synthetic.main.activity_list_data.*
+import kotlinx.android.synthetic.main.activity_test.*
 
 class TestActivity : AppCompatActivity() {
-    var isTest = true
+    private var isLogged = false
+    private var user: String? = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
         getExtra()
-    }
+        init()
+        eventHandle()
+        wvContent.settings.apply {
+            javaScriptEnabled = true
+            @Suppress("DEPRECATION")
+            layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
+            domStorageEnabled = true
+            allowFileAccessFromFileURLs = true
+            allowUniversalAccessFromFileURLs = true
+            useWideViewPort = true
+            loadWithOverviewMode = true
+            mediaPlaybackRequiresUserGesture = false
+            setSupportMultipleWindows(true)
+            setAppCacheEnabled(true)
+        }
+        wvContent.loadUrl("http://onmobi.vn/u/login")
+}
 
     private fun getExtra() {
-        var bundle = intent.getBundleExtra("Test")
+     /*   var bundle = intent.getBundleExtra("Test")
         var user = bundle.getString("Test")
         Log.e("TAG", "USER: $user")
-        user?.let { setupWebView(it) }
+        user?.let { setupWebView(it) }*/
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -39,7 +57,6 @@ class TestActivity : AppCompatActivity() {
             setSupportMultipleWindows(true)
             setAppCacheEnabled(true)
         }
-
         wvContent.loadUrl("http://onmobi.vn/u/login")
 
         wvContent.webViewClient = object : WebViewClient() {
@@ -71,10 +88,7 @@ class TestActivity : AppCompatActivity() {
                     Log.e("TAG", "USER: $user")
                     view.evaluateJavascript(checkLogin) {
                         Log.e("TAG", "LOGIN SUCCESS $user")
-                     /*   if (isTest) {
-                            wvContent.loadUrl("http://onmobi.vn/video/detail/18645/nhung-khoanh-khac-dang-nho-cua-lin-dan-tai-giai-olympic-p1")
-                            isTest = false
-                        }*/
+//                        webView.loadUrl("http://onmobi.vn/video/detail/18645/nhung-khoanh-khac-dang-nho-cua-lin-dan-tai-giai-olympic-p1")
                         /*isLogged = true
                         viewModel.startAction = System.currentTimeMillis()
                         startVideos()*/
@@ -82,5 +96,15 @@ class TestActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun init() {
+    }
+
+    private fun eventHandle() {
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 }

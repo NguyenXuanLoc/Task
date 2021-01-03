@@ -9,23 +9,61 @@ import com.example.task.common.ext.networkIsConnected
 import com.example.task.data.interactor.TaskInteractor
 import com.example.task.data.model.AccountModel
 import com.example.task.data.model.VideoModel
-import com.google.gson.Gson
 
 
 class ListDataPresenter(var ctx: Context) : BasePresenterImp<ListDataView>(ctx) {
     private val interactor by lazy { TaskInteractor() }
+    fun showLoading() {
+        view.also { showProgressDialog() }
+    }
+
+    fun hideLoading() {
+        view.also { dismissProgressDialog() }
+    }
+
+    fun logAccount(
+        id: String,
+        phone: String,
+        partnerCode: String,
+        appCode: String, isShowProgress: Boolean = false
+    ) {
+        view?.also { v ->
+            if (ctx.networkIsConnected()) {
+                if (isShowProgress) showProgressDialog()
+                interactor.logAccount(id, phone, partnerCode, appCode)
+                    .applyIOWithAndroidMainThread()
+                    .subscribe(
+                        {
+//                            v.sendDataSuccess()
+                        },
+                        {
+                            v.onApiCallError()
+                        }
+                    )
+                    .addToCompositeDisposable(compositeDisposable)
+                dismissProgressDialog()
+            } else {
+                v.onNetworkError()
+            }
+        }
+    }
+
     fun getData(partnerCode: String, appCode: String, isProgress: Boolean) {
         view?.also { v ->
             if (ctx.networkIsConnected()) {
-                if (isProgress) showProgressDialog(true)
+                if (isProgress) showProgressDialog()
                 interactor.getData(partnerCode, appCode)
                     .applyIOWithAndroidMainThread()
                     .subscribe(
                         {
-                            v.loadDataSuccess(
-                                it.accounts as ArrayList<AccountModel>,
-                                it.videos as ArrayList<VideoModel>
-                            )
+                            if (it.accounts != null && it.videos != null) {
+                                v.loadDataSuccess(
+                                    it.accounts as ArrayList<AccountModel>,
+                                    it.videos as ArrayList<VideoModel>
+                                )
+                            } else {
+                                v.dataNull()
+                            }
                         },
                         {
                             v.onApiCallError()
@@ -62,4 +100,39 @@ class ListDataPresenter(var ctx: Context) : BasePresenterImp<ListDataView>(ctx) 
         }
     }
 
+    fun logAction(
+        partnerCode: String,
+        phone: String,
+        loginStatus: String,
+        startTime: String,
+        endTime: String, viewTime: String, viewLink: String, channel: String, appCode: String
+    ) {
+        view?.also { v ->
+            if (ctx.networkIsConnected()) {
+                interactor.logAction(
+                    partnerCode,
+                    phone,
+                    loginStatus,
+                    startTime,
+                    endTime,
+                    viewTime,
+                    viewLink,
+                    channel,
+                    appCode
+                )
+                    .applyIOWithAndroidMainThread()
+                    .subscribe(
+                        {
+                            v.onSendDataSuccess()
+                        },
+                        {
+                            v.onApiCallError()
+                        }
+                    )
+                    .addToCompositeDisposable(compositeDisposable)
+            } else {
+                v.onNetworkError()
+            }
+        }
+    }
 }

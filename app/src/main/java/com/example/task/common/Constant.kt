@@ -10,6 +10,10 @@ object Constant {
     const val WHAT_RESULT = 2
     const val WHAT_NOTIFY = 3
 
+    const val SHARED_NAME = "sharedName"
+    const val SETTING_AGENT = "setting_agent" // Thời gian chờ tối đa 1 video
+    const val URL_LOGIN = "http://onmobi.vn/u/login"
+
 }
 
 object ErrorCode {
@@ -40,10 +44,15 @@ object Api {
     const val VIEW_LINK = "view_link"
     const val CHANNEL = "channel"
     const val ON_MOBI = "OnMobi"
+    const val GET_SETTING = "get_setting"
 
     const val LOGIN_ONMOBI = "auth/authorize"
+
 }
 
 object Key {
     const val PARTNER_CODE = "partner_code"
+    const val GET_SETTING = "get_setting"
+    const val DURATION = "duration"
+    const val ON_MOBI = "OnMobi"
 }

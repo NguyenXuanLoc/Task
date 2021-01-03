@@ -10,8 +10,8 @@ fun DataResponse.convertToModel(): DataModel {
         code = response.code
 //        message = response.message ?: ""
         data?.also { data ->
-            accounts = data.listAccount?.convertToModels()
-            videos = data.listVideo?.convertToModels()
-        }
+                accounts = data.listAccount?.convertToModels()
+                videos = data.listVideo?.convertToModels()
+            }
     }
 }

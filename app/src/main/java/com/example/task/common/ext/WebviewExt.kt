@@ -1,7 +1,9 @@
 package com.example.task.common.ext
 
 import android.util.Log
+import android.util.TimeUtils
 import android.webkit.*
+import com.example.task.common.util.TimeUtil
 
 fun WebView.settingss() {
     this.settings.apply {
@@ -18,12 +20,12 @@ fun WebView.settingss() {
         setAppCacheEnabled(true)
     }
 
-   /* this.webViewClient = WebViewClient()
-    this.settings.domStorageEnabled = true
-    this.settings.loadWithOverviewMode = true
-    this.settings.useWideViewPort = true
-    this.settings.builtInZoomControls = true
-    this.settings.mediaPlaybackRequiresUserGesture = true*/
+    /* this.webViewClient = WebViewClient()
+     this.settings.domStorageEnabled = true
+     this.settings.loadWithOverviewMode = true
+     this.settings.useWideViewPort = true
+     this.settings.builtInZoomControls = true
+     this.settings.mediaPlaybackRequiresUserGesture = true*/
 }
 
 fun WebView.openWebView(url: String, v: WebViewInterface) {
@@ -45,10 +47,12 @@ fun WebView.openWebView(url: String, v: WebViewInterface) {
 fun WebView.loadUrlAutoPlay(url: String, v: WebViewInterface) {
     this.loadUrl(url)
     this.webViewClient = object : WebViewClient() {
+
         override fun onPageFinished(view: WebView?, url: String?) {
+            v.getStartTime(TimeUtil.getCurrentTime())
             v.readyPlayVideo()
             //Auto play when loadVideo success
-            view?.loadUrl("javascript:(function() { document.getElementsByTagName('video')[0].play(); })()");
+            view?.loadUrl("javascript:(function() { document.getElementsByTagName('video')[0].play(); })()")
             super.onPageFinished(view, url)
         }
 
@@ -56,7 +60,6 @@ fun WebView.loadUrlAutoPlay(url: String, v: WebViewInterface) {
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
-            Log.e("TAG", "REQUEST: ${request?.url.toString()}")
             if (request?.url?.toString()?.contains("trace") == true) {
 
                 request.url.getQueryParameter("current_time")?.let { currentTime ->
@@ -152,4 +155,5 @@ fun WebView.login(url: String, v: WebViewInterface) {
 
 interface WebViewInterface {
     fun readyPlayVideo()
+    fun getStartTime(startTime: String)
 }
