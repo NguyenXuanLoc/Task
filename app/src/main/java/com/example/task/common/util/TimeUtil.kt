@@ -12,7 +12,7 @@ object TimeUtil {
         return (minute * 60 * 1000).toLong()
     }
 
-    fun getSecond(second: Int = 30): Long {
+    fun getSecond(second: Int = 10): Long {
         return (second * 1000).toLong()
     }
 }

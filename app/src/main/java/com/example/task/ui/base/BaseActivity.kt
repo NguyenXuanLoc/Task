@@ -2,6 +2,7 @@ package com.example.task.ui.base
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
@@ -26,6 +27,7 @@ abstract class BaseActivity<V : BaseView, P : BasePresenterImp<V>> : AppCompatAc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         presenter = initPresenter()
         presenter.attachView(initView())
         getLayoutId()?.run {

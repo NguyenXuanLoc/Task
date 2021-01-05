@@ -7,6 +7,7 @@ import android.webkit.CookieManager
 import android.webkit.CookieSyncManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.app.ActivityCompat.recreate
 import com.example.task.R
 import com.example.task.common.Api
 import com.example.task.common.Constant
@@ -25,13 +26,16 @@ import kotlinx.android.synthetic.main.activity_list_data.*
 import org.jetbrains.anko.toast
 import java.io.File
 
-class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDataView {
+class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDataView,
+    WebViewInterface {
     private var durationWatching = ""
     private var partnerCode: String? = null
     private var accounts: ArrayList<AccountModel> = ArrayList()
     private var videos: ArrayList<VideoModel> = ArrayList()
     private var index = 0
     private var startTime = ""
+    private val handler by lazy { Handler() }
+    private var runPlayVideo: Runnable? = null
     override fun initView(): ListDataView {
         return this
     }
@@ -46,6 +50,7 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
     }
 
     override fun initWidgets() {
+        index = 0
         clearCookies()
         clearCache()
         applyToolbar()
@@ -53,6 +58,7 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
         partnerCode?.let { presenter.getData(it, Api.ON_MOBI, true) }
         wvContent.settingss()
         presenter.showLoading()
+        initRunPlayVideo()
     }
 
     override fun dataNull() {
@@ -60,53 +66,48 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
         finish()
     }
 
+    private fun initRunPlayVideo() {
+        runPlayVideo = Runnable {
+            if (videos.size > index) {
+                Log.e("TAG", "PLAY VIDEO AT: ${index}")
+                var acc = accounts[0]
+                presenter.logAction(
+                    acc.partnerCode.toString(),
+                    acc.phone.toString(),
+                    isLogin.toString(),
+                    startTime,
+                    TimeUtil.getCurrentTime(),
+                    TimeUtil.getSecond(durationWatching.toInt() + 10).toString(),
+                    videos[index].link.toString(),
+                    videos[index].channel.toString(),
+                    Api.ON_MOBI
+                )
+                showTitle("Play video ${index + 1}/${videos.size}")
+                wvContent.loadUrlAutoPlay(videos[index].link.toString(), this)
+                index++
+            } else {
+                var acc = accounts[0]
+                presenter.logAccount(
+                    acc.id.toString(),
+                    acc.phone.toString(),
+                    acc.partnerCode.toString(),
+                    Api.ON_MOBI
+                )
+//                                clearCookies()
+//                                clearCache()
+//                                partnerCode?.let { presenter.getData(it, Api.ON_MOBI, true) }
+                recreate()
+//                releaseInstance()
+            }
+        }
+    }
+
     override fun loginSuccess(user: InfoModel) {
         presenter.showLoading()
         if (user.accessToken != null) {
             val json = Gson().toJson(user)
             wvContent.loadUrl(Constant.URL_LOGIN)
-            wvContent.webViewClient = object : WebViewClient(), WebViewInterface {
-
-                override fun readyPlayVideo() {
-                    Handler().postDelayed(
-                        Runnable {
-                            if (videos.size > index) {
-                                Log.e("TAG", "PLAY VIDEO AT: ${index}")
-                                var acc = accounts[0]
-                                presenter.logAction(
-                                    acc.partnerCode.toString(),
-                                    acc.phone.toString(),
-                                    isLogin.toString(),
-                                    startTime,
-                                    TimeUtil.getCurrentTime(),
-                                    TimeUtil.getSecond().toString(),
-                                    videos[index].link.toString(),
-                                    videos[index].channel.toString(),
-                                    Api.ON_MOBI
-                                )
-                                showTitle("Play video ${index + 1}/${videos.size}")
-                                wvContent.loadUrlAutoPlay(videos[index].link.toString(), this)
-                                index++
-                            } else {
-                                var acc = accounts[0]
-                                presenter.logAccount(
-                                    acc.id.toString(),
-                                    acc.phone.toString(),
-                                    acc.partnerCode.toString(),
-                                    Api.ON_MOBI
-                                )
-                                clearCookies()
-                                clearCache()
-                                partnerCode?.let { presenter.getData(it, Api.ON_MOBI, true) }
-                            }
-                        }, TimeUtil.getSecond()
-                    )
-                }
-
-                override fun getStartTime(time: String) {
-                    startTime = time
-                }
-
+            wvContent.webViewClient = object : WebViewClient()/*, WebViewInterface*/ {
                 override fun onPageFinished(view: WebView, url: String?) {
                     super.onPageFinished(view, url)
                     if (url?.contains("http") == true) {
@@ -128,7 +129,7 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
                                     Handler().postDelayed(Runnable {
                                         wvContent.loadUrlAutoPlay(
                                             videos[index].link.toString(),
-                                            this
+                                            this@ListDataActivity
                                         )
                                     }, 1000)
                                     index++
@@ -166,11 +167,12 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
     }
 
     override fun getExtrasValue() {
+        Log.e("TAG", "getExtrasValue")
         intent.extras?.run {
             if (containsKey(Key.PARTNER_CODE)) {
                 partnerCode = getString(Key.PARTNER_CODE)
             }
-            if (containsKey(Key.GET_SETTING)) {
+            if (containsKey(Key.DURATION)) {
                 durationWatching = getString(Key.DURATION, "30")
             }
         }
@@ -216,8 +218,12 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        finish()
+    override fun readyPlayVideo() {
+        handler.removeCallbacks(runPlayVideo)
+        handler.postDelayed(runPlayVideo, TimeUtil.getSecond(durationWatching.toInt() + 10))
+    }
+
+    override fun getStartTime(time: String) {
+        startTime = time
     }
 }
