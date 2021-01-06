@@ -11,7 +11,7 @@ object Constant {
     const val WHAT_NOTIFY = 3
 
     const val SHARED_NAME = "sharedName"
-    const val SETTING_AGENT = "setting_agent" // Thời gian chờ tối đa 1 video
+    const val SETTING_AGENT = "setting_agent"
     const val URL_LOGIN = "http://onmobi.vn/u/login"
 
 }
