@@ -45,13 +45,12 @@ fun WebView.openWebView(url: String, v: WebViewInterface) {
 }
 
 fun WebView.loadUrlAutoPlay(url: String, v: WebViewInterface) {
+    v.timeWatching(0)
     this.loadUrl(url)
     this.webViewClient = object : WebViewClient() {
-
         override fun onPageFinished(view: WebView?, url: String?) {
             v.getStartTime(TimeUtil.getCurrentTime())
             v.readyPlayVideo()
-            //Auto play when loadVideo success
             view?.loadUrl("javascript:(function() { document.getElementsByTagName('video')[0].play(); })()")
             super.onPageFinished(view, url)
         }
@@ -60,14 +59,10 @@ fun WebView.loadUrlAutoPlay(url: String, v: WebViewInterface) {
             view: WebView?,
             request: WebResourceRequest?
         ): WebResourceResponse? {
-            if (request?.url?.toString()?.contains("trace") == true) {
-
+            if (request?.url?.toString()?.contains("push-log") == true) {
                 request.url.getQueryParameter("current_time")?.let { currentTime ->
-                    try {
-                        Log.e("TAG", "$currentTime")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    var times = currentTime.split(".")
+                    v.timeWatching(times[0].toInt())
                 }
             }
             return super.shouldInterceptRequest(view, request)
@@ -156,4 +151,5 @@ fun WebView.login(url: String, v: WebViewInterface) {
 interface WebViewInterface {
     fun readyPlayVideo()
     fun getStartTime(startTime: String)
+    fun timeWatching(time: Int)
 }

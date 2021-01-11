@@ -54,5 +54,6 @@ object Key {
     const val PARTNER_CODE = "partner_code"
     const val GET_SETTING = "get_setting"
     const val DURATION = "duration"
+    const val WAIT_TIME = "waitTime"
     const val ON_MOBI = "OnMobi"
 }

@@ -28,7 +28,9 @@ import java.io.File
 
 class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDataView,
     WebViewInterface {
+    private var isFirstOpen = false
     private var durationWatching = ""
+    private var waitTime = ""
     private var partnerCode: String? = null
     private var accounts: ArrayList<AccountModel> = ArrayList()
     private var videos: ArrayList<VideoModel> = ArrayList()
@@ -70,18 +72,6 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
         runPlayVideo = Runnable {
             if (videos.size > index) {
                 Log.e("TAG", "PLAY VIDEO AT: ${index}")
-                var acc = accounts[0]
-                presenter.logAction(
-                    acc.partnerCode.toString(),
-                    acc.phone.toString(),
-                    isLogin.toString(),
-                    startTime,
-                    TimeUtil.getCurrentTime(),
-                    TimeUtil.getSecond(durationWatching.toInt() + 10).toString(),
-                    videos[index].link.toString(),
-                    videos[index].channel.toString(),
-                    Api.ON_MOBI
-                )
                 showTitle("Play video ${index + 1}/${videos.size}")
                 wvContent.loadUrlAutoPlay(videos[index].link.toString(), this)
                 index++
@@ -93,11 +83,7 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
                     acc.partnerCode.toString(),
                     Api.ON_MOBI
                 )
-//                                clearCookies()
-//                                clearCache()
-//                                partnerCode?.let { presenter.getData(it, Api.ON_MOBI, true) }
                 recreate()
-//                releaseInstance()
             }
         }
     }
@@ -107,7 +93,7 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
         if (user.accessToken != null) {
             val json = Gson().toJson(user)
             wvContent.loadUrl(Constant.URL_LOGIN)
-            wvContent.webViewClient = object : WebViewClient()/*, WebViewInterface*/ {
+            wvContent.webViewClient = object : WebViewClient(){
                 override fun onPageFinished(view: WebView, url: String?) {
                     super.onPageFinished(view, url)
                     if (url?.contains("http") == true) {
@@ -175,6 +161,9 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
             if (containsKey(Key.DURATION)) {
                 durationWatching = getString(Key.DURATION, "30")
             }
+            if (containsKey(Key.DURATION)) {
+                waitTime = getString(Key.WAIT_TIME, "30")
+            }
         }
     }
 
@@ -220,10 +209,42 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
 
     override fun readyPlayVideo() {
         handler.removeCallbacks(runPlayVideo)
-        handler.postDelayed(runPlayVideo, TimeUtil.getSecond(durationWatching.toInt() + 10))
+        handler.postDelayed(runPlayVideo, TimeUtil.getSecond(waitTime.toInt()))
     }
 
     override fun getStartTime(time: String) {
         startTime = time
+    }
+
+    override fun timeWatching(time: Int) {
+        if (time > durationWatching.toInt()) {
+            handler.removeCallbacks(runPlayVideo)
+            if (videos.size > index) {
+                Log.e("TAG", "PLAY VIDEO AT: ${index}")
+                var acc = accounts[0]
+                presenter.logAction(
+                    acc.partnerCode.toString(),
+                    acc.phone.toString(),
+                    startTime,
+                    TimeUtil.getCurrentTime(),
+                    time.toString(),
+                    videos[index].link.toString(),
+                    videos[index].channel.toString(),
+                    Api.ON_MOBI
+                )
+                showTitle("Play video ${index + 1}/${videos.size}")
+                wvContent.loadUrlAutoPlay(videos[index].link.toString(), this)
+                index++
+            } else {
+                var acc = accounts[0]
+                presenter.logAccount(
+                    acc.id.toString(),
+                    acc.phone.toString(),
+                    acc.partnerCode.toString(),
+                    Api.ON_MOBI
+                )
+                recreate()
+            }
+        }
     }
 }

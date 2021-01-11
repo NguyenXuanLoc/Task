@@ -44,6 +44,7 @@ class PartnerActivity : BaseActivity<PartnerView, PartnerPresenter>(), PartnerVi
         clearCache()
         applyToolbar()
         PefUtil.putString(Constant.SETTING_AGENT, WebView(this).settings.userAgentString)
+        Log.e("TAG", "USER AGENT: ${WebView(this).settings.userAgentString}")
         showTitle(R.string.home_page)
         presenter.showLoading()
         rclPartner.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -61,7 +62,11 @@ class PartnerActivity : BaseActivity<PartnerView, PartnerPresenter>(), PartnerVi
             }
         }
         settingModel?.let {
-            bundleOf(Key.PARTNER_CODE to ob, Key.DURATION to settingModel!!.duration).run {
+            bundleOf(
+                Key.PARTNER_CODE to ob,
+                Key.DURATION to settingModel!!.duration,
+                Key.WAIT_TIME to settingModel!!.waitTime
+            ).run {
                 openActivity(ListDataActivity::class.java, this)
             }
         }

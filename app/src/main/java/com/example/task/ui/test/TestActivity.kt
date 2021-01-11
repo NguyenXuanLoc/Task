@@ -7,6 +7,7 @@ import android.util.Log
 import android.webkit.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.task.R
+import com.example.task.common.ext.settingss
 import kotlinx.android.synthetic.main.activity_test.*
 
 class TestActivity : AppCompatActivity() {
@@ -19,20 +20,8 @@ class TestActivity : AppCompatActivity() {
         getExtra()
         init()
         eventHandle()
-        wvContent.settings.apply {
-            javaScriptEnabled = true
-            @Suppress("DEPRECATION")
-            layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
-            domStorageEnabled = true
-            allowFileAccessFromFileURLs = true
-            allowUniversalAccessFromFileURLs = true
-            useWideViewPort = true
-            loadWithOverviewMode = true
-            mediaPlaybackRequiresUserGesture = false
-            setSupportMultipleWindows(true)
-            setAppCacheEnabled(true)
-        }
-        wvContent.loadUrl("http://onmobi.vn/u/login")
+        wvContent.settingss()
+        wvContent.loadUrl("https://gitlab.com/")
 }
 
     private fun getExtra() {

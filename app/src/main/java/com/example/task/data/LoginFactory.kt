@@ -19,20 +19,24 @@ import java.util.concurrent.TimeUnit
 interface LoginFactory {
 
     companion object {
-        private const val REQUEST_TIMEOUT = 15L
+        private const val REQUEST_TIMEOUT = 60L
         fun create(BASE_URL: String = "http://api.onmobi.vn/v1/"): LoginFactory? {
             val okHttpClientBuilder = OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
                 .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor { chain ->
                     val newRequest = chain.request().newBuilder()
                         .addHeader("authorization", "Bearer xyz")
+                        .addHeader("Origin", "http://mobion.vn")
                         .addHeader("User-Agent", PefUtil.getString(Constant.SETTING_AGENT))
-                        .addHeader("Origin", "http://onmobi.vn")
-                        .addHeader("Referer", "http://onmobi.vn/")
+                        .addHeader("Content-Type", "application/json; charset=utf-8")
                         .addHeader("Accept", "*/*")
-                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                        .addHeader("Referer", "http://mobion.vn/u/login")
+                        .addHeader("Accept-Encoding", "gzip, deflate")
+                        .addHeader("Accept-Language", "vi,en-US;q=0.9,en;q=0.8")
+                        .addHeader("Connection", "keep-alive")
                         .build()
                     chain.proceed(newRequest)
                 }

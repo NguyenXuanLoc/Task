@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
         <activity android:name="vn.meocon.increaseviews.screen.test.TestActivity">
+<!--            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
 
         </activity>
         <activity

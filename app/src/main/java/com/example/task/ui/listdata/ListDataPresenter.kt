@@ -103,9 +103,13 @@ class ListDataPresenter(var ctx: Context) : BasePresenterImp<ListDataView>(ctx) 
     fun logAction(
         partnerCode: String,
         phone: String,
-        loginStatus: String,
         startTime: String,
-        endTime: String, viewTime: String, viewLink: String, channel: String, appCode: String
+        endTime: String,
+        viewTime: String,
+        viewLink: String,
+        channel: String,
+        appCode: String,
+        loginStatus: String = "1"
     ) {
         view?.also { v ->
             if (ctx.networkIsConnected()) {
