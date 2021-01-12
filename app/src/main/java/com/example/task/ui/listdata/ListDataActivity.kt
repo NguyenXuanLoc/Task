@@ -28,7 +28,6 @@ import java.io.File
 
 class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDataView,
     WebViewInterface {
-    private var isFirstOpen = false
     private var durationWatching = ""
     private var waitTime = ""
     private var partnerCode: String? = null
@@ -89,19 +88,19 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
     }
 
     override fun loginSuccess(user: InfoModel) {
+        isLogin = true
         presenter.showLoading()
         if (user.accessToken != null) {
             val json = Gson().toJson(user)
             wvContent.loadUrl(Constant.URL_LOGIN)
-            wvContent.webViewClient = object : WebViewClient(){
+            wvContent.webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView, url: String?) {
                     super.onPageFinished(view, url)
                     if (url?.contains("http") == true) {
                         val checkLogin = "window.localStorage.setItem('user', '$json');"
                         view.evaluateJavascript(checkLogin) {
                             Log.e("TAG", "LOGIN SUCCESS: USER$json")
-                            if (json.isNotEmpty()) {
-                                isLogin = true
+                            if (json.isNotEmpty() && isLogin) {
                                 view?.loadUrl(
                                     "javascript:(function() { " +
                                             "var element = document.getElementById('hplogo');"
@@ -232,8 +231,10 @@ class ListDataActivity : BaseActivity<ListDataView, ListDataPresenter>(), ListDa
                     videos[index].channel.toString(),
                     Api.ON_MOBI
                 )
-                showTitle("Play video ${index + 1}/${videos.size}")
-                wvContent.loadUrlAutoPlay(videos[index].link.toString(), this)
+                runOnUiThread {
+                    showTitle("Play video ${index + 1}/${videos.size}")
+                    wvContent.loadUrlAutoPlay(videos[index].link.toString(), this)
+                }
                 index++
             } else {
                 var acc = accounts[0]
